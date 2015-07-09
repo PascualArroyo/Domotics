@@ -1,0 +1,46 @@
+#! /bin/sh
+# /etc/init.d/domotics_device
+#
+
+# Some things that run always
+#touch /var/lock/blah
+
+# Carry out specific functions when asked to by the system
+
+start() {
+    sudo python /home/pi/Domotics/init.py &
+    echo "Server started."
+}
+
+stop() {
+    
+    pid=`ps -ef | grep '[p]ython /home/pi/Domotics/init.py' | awk '{ print $2 }'`
+    echo $pid
+    kill $pid
+    pid=`ps -ef | grep '[p]ython /home/pi/Domotics/install.py' | awk '{ print $2 }'`
+    echo $pid
+    kill $pid
+    pid=`ps -ef | grep '[p]ython /home/pi/Domotics/device.py' | awk '{ print $2 }'`
+    echo $pid
+    kill $pid
+
+    sleep 1
+    echo "Server killed."
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: /etc/init.d/domotics_device {start|stop|restart}"
+        exit 1
+esac
+exit 0
