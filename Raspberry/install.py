@@ -47,7 +47,7 @@ class Install:
 		#Cuando se encienda el dispositivo se encenderan todos los leds
 		self.leds.setLedsOn()
 
-		time.sleep(5)
+		time.sleep(3)
 
 		self.leds.setLedsAdhoc()
 
@@ -106,23 +106,17 @@ class Install:
 		#Eliminamos el fichero de configuracion
 		os.system('sudo rm /home/pi/Domotics/deviceConfig.py')
 
-		#Copiamos el fichero de configuracion en el directorio Domotics
-		os.system('sudo cp /home/pi/Domotics/Default/deviceConfig.py /home/pi/Domotics/deviceConfigAux.py')
-
-		#Configuramos el fichero con el valor del id del dispositivo
-		with open("/home/pi/Domotics/deviceConfig.py", "wt") as fout:
-			with open("/home/pi/Domotics/deviceConfigAux.py", "rt") as fin:
-				for line in fin:
-					fout.write(line.replace('<DEVICE_ID>', deviceId))
-
-		#Eliminamos la plantilla
-		os.system('sudo rm /home/pi/Domotics/deviceConfigAux.py')
+		#Configuramos el fichero plantilla de configuracion con el valor del id del dispositivo
+			with open("/home/pi/Domotics/deviceConfig.py", "wt") as fout:
+				with open("/home/pi/Domotics/Default/deviceConfigAux.py", "rt") as fin:
+					for line in fin:
+						fout.write(line.replace('<DEVICE_ID>', idDevice))
 
 		#Sustituimos el fichero de arranque por la plantilla de arranque normal
 		os.system('sudo cp /home/pi/Domotics/Default/bootNormal.py /home/pi/Domotics/bootConfig.py')
 
 
-		for i in range(3):
+		for i in range(5):
 			self.leds.setLedsOn()
 			time.sleep(0.5)
 			
@@ -135,7 +129,6 @@ class Install:
 
 	def exitAdhocMode(self, channel):
 		
-		print "Reset"
 
 		time.sleep(1)
 

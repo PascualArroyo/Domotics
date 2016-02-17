@@ -32,7 +32,7 @@ class TSL2561:
         self.i2c.write8(0x80, 0x03)     # enable the device
 
 
-    def setGain(self,gain=1):
+    def setGain(self,gain=0):
         """ Set the gain """
         if (gain != self.gain):
             if (gain==1):
@@ -87,8 +87,11 @@ class TSL2561:
         if (self.gain==1):
            ambient *= 16    # scale 1x to 16x
            IR *= 16         # scale 1x to 16x
-                        
-        ratio = (IR / float(ambient)) # changed to make it run under python 2
+        
+        if float(ambient) == 0:
+            ratio = 9999
+        else:
+            ratio = (IR / float(ambient)) # changed to make it run under python 2
 
         if (self.debug):
             print "IR Result", IR

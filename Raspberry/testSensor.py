@@ -1,13 +1,14 @@
 from HTU21D import HTU21D
 from TSL2561 import TSL2561
-import Adafruit_BMP.BMP085 as BMP085
+from BMP085 import BMP085
 
 htu = HTU21D()
 print htu.read_tmperature()
 print htu.read_humidity()
 
-sensor = BMP085.BMP085()
+sensor = BMP085()
 print sensor.read_pressure()
+print sensor.read_temperature()
 
 tsl=TSL2561()
 print tsl.readLux()
